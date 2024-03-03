@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotEquals;
 public class Testrunner {
 
     @Test
-    public void letterToMorse(){
+    public void upperCaseLetterToMorse(){
         Converter convert = new Converter();
 
         String expected = ".-";
@@ -26,7 +26,7 @@ public class Testrunner {
     }
 
     @Test
-    public void smallLetterToMorse(){
+    public void lowerCaseLetterToMorse(){
         Converter convert = new Converter();
 
         String expected = "-...";
@@ -70,5 +70,16 @@ public class Testrunner {
 
         //Kollar att det INTE är equals!
         assertNotEquals(expected,actual);
+    }
+
+    @Test
+    public void wordToMorse(){
+        Converter convert = new Converter();
+
+        String expected = ".... - .---";
+
+        String actual = convert.getMorse("HEJ");
+
+        assertEquals(expected,actual);
     }
 }

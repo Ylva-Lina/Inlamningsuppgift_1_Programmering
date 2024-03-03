@@ -59,20 +59,33 @@ public class Converter {
     //Översätter text till morse
     public String getMorse(String text) {
         text = text.toUpperCase();
-        //Returnerar det korresponderade värdet som ligger sparat vid nyckeln "text"
-        return morseAlphabet.get(text);
+        String morse = "";
+
+        //Kollar om inkommande texten matchar något i hashmapen
+        if (morseAlphabet.containsKey(text)) {
+            //Sparar det korresponderade värdet som ligger vid nyckeln "text" för retur i slutet av metoden
+            morse = morseAlphabet.get(text);
+            //Felmeddelande om det inte finns någon match
+        } else {
+            System.out.println("That doesn't match anything in the library, try again.");
+        }
+        return morse;
     }
 
     //Översätter morse till text
     public String getText(String morse) {
         String text = "";
 
-        //Loopar igenom alla nycklar med hjälp av .keySet()
-        for (String key : morseAlphabet.keySet()) {
-            //kollar om värdet för den aktuella nyckeln motsvarar den inkommande morsekoden
-            if (morseAlphabet.get(key).equals(morse)) {
-                text = key;
+        if (morseAlphabet.containsValue(morse)) {
+            //Loopar igenom alla nycklar med hjälp av .keySet()
+            for (String key : morseAlphabet.keySet()) {
+                //kollar om värdet för den aktuella nyckeln motsvarar den inkommande morsekoden
+                if (morseAlphabet.get(key).equals(morse)) {
+                    text = key;
+                }
             }
+        } else {
+            System.out.println("That doesn't match anything in the library, try again.");
         }
         return text;
     }

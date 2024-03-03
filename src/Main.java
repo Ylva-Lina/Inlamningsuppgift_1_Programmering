@@ -5,48 +5,61 @@ public class Main {
     public static void main(String[] args) {
 
         //Fixar lite setup med scanner, objekt av min logik-klass,
-        //välkomstinfo och val av riktning på översättning
+        //välkomstinfo, variabel för val av riktning på översättning
         Scanner scan = new Scanner(System.in);
         Converter convert = new Converter();
         convert.printWelcome();
+        int choice = 0;
 
+        //Försöker läsa in val som int, skriver ut felmeddelande om man stoppar in något annat
+        //Om man skriver in en int men FEL int, dvs inte 1 eller 2, hanteras det i en else-sats längre ner i loopen
         try {
-            int choice = Integer.parseInt(scan.nextLine());
+            choice = Integer.parseInt(scan.nextLine());
+        } catch (Exception e) {
+            System.out.println("Something went wrong... Next time, try following the instructions.");
+        }
 
-            while (true) {
-                if (choice == 1) {
+        while (true) {
+            if (choice == 1) {
 
-                    System.out.print("Letter/number: ");
-                    String input = scan.nextLine();
+                System.out.print("Letter/number: ");
+                String input = scan.nextLine();
 
-                    if (input.equalsIgnoreCase("stop")) {
-                        System.out.println("Quitting...");
-                        break;
-                    }
-
+                //om inputen är "stop" avslutas loopen utan vidare åtgärd
+                if (input.equalsIgnoreCase("stop")) {
+                    System.out.println("Quitting...");
+                    break;
+                    //Annars utför vi konvertering - OM inputen matchar något i biblioteket/hashmapen
+                    //Matchar det inte returneras "", så vi kollar efter motsatsen med !isEmpty
+                } else if (!convert.getMorse(input).isEmpty()) {
                     String output = convert.getMorse(input);
                     System.out.println(input + " translates to: " + output + "\n");
-
-                } else if (choice == 2) {
-
-                    System.out.print("Morse: ");
-                    String input = scan.nextLine();
-
-                    if (input.equalsIgnoreCase("stop")) {
-                        System.out.println("Quitting...");
-                        break;
-                    }
-
-                    String output = convert.getText(input);
-                    System.out.println(input + " translates to: " + output + "\n");
-
-                } else {
-                    System.out.println("Please choose 1 or 2!");
-                    choice = Integer.parseInt(scan.nextLine());
                 }
             }
-        } catch (Exception e) {
-            System.out.println("Something went wrong... Next time, try following the instructions!");
+
+            if (choice == 2) {
+
+                System.out.print("Morse: ");
+                String input = scan.nextLine();
+
+                if (input.equalsIgnoreCase("stop")) {
+                    System.out.println("Quitting...");
+                    break;
+                } else if (!convert.getText(input).isEmpty()) {
+                    String output = convert.getText(input);
+                    System.out.println(input + " translates to: " + output + "\n");
+                }
+
+                //Om man stoppar in en felaktig int hamnar man här och får felmeddelande, så man har fortfarande chans
+                //att rätta till det och fortsätta i loopen
+            } else {
+                System.out.println("Please choose 1 (eng to morse) or 2 (morse to eng)!");
+                try {
+                    choice = Integer.parseInt(scan.nextLine());
+                } catch (Exception e) {
+                    System.out.println("Something went wrong... Next time, try following the instructions.");
+                }
+            }
         }
     }
 }
