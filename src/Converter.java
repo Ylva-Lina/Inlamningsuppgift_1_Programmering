@@ -5,7 +5,7 @@ public class Converter {
     //Deklarerar hashmap
     private HashMap<String, String> morseAlphabet = new HashMap<>();
 
-    //Konstruktor som tillderlar värden i hashmappen
+    //Konstruktor som tilldelar värden i hashmappen
     public Converter() {
         morseAlphabet.put("A", ".-");
         morseAlphabet.put("B", "-...");
@@ -46,14 +46,14 @@ public class Converter {
         morseAlphabet.put(".", ".-.-.-");
         morseAlphabet.put(",", "--..--");
         morseAlphabet.put("?", "..--..");
+        morseAlphabet.put(" ", "/");
     }
 
     public void printWelcome() {
-        System.out.println("Welcome to the morse code converter!");
-        System.out.println("Here you can convert English letters and numbers to morse code, or vice versa.");
-        System.out.println("You can exit any time by just writing 'stop'\n");
-        System.out.println("For morse, use '.' for dots and '-' for dashes.");
-        System.out.print("Please choose if you want to convert English to morse code (1), or morse code to English (2): ");
+        System.out.println("Welcome to the morse code converter! Here you can convert English to morse code, or vice versa.");
+        System.out.println("Exit by writing 'stop'\n");
+        System.out.println("Use '.' for dots and '-' for dashes in morse, put a space between each letter/character and space + '/' between words.");
+        System.out.println("Please choose if you want to convert English to morse code (1), or morse code to English (2): ");
     }
 
     //Översätter text till morse
@@ -61,31 +61,42 @@ public class Converter {
         text = text.toUpperCase();
         String morse = "";
 
-        //Kollar om inkommande texten matchar något i hashmapen
-        if (morseAlphabet.containsKey(text)) {
-            //Sparar det korresponderade värdet som ligger vid nyckeln "text" för retur i slutet av metoden
-            morse = morseAlphabet.get(text);
-            //Felmeddelande om det inte finns någon match
-        } else {
-            System.out.println("That doesn't match anything in the library, try again.");
+        for (int i = 0; i < text.length(); i++) {
+            //Kollar tecken för tecken i inkommande "text"-Stringen om det matchar något i hashmapen
+            if (morseAlphabet.containsKey(String.valueOf(text.charAt(i)))) {
+                //Sparar det korresponderande värdet som ligger vid nyckeln "text" i en String "morse" för retur i slutet av metoden
+                morse += (morseAlphabet.get(String.valueOf(text.charAt(i))));
+                morse += " ";
+            } else {
+                //Felmeddelande om det inte finns någon match
+                morse = "That doesn't match anything in the library, try again.";
+            }
         }
-        return morse;
+        return morse.trim(); //Returnerar det som sparats i "morse" och trimmar bort trailing white space i slutet
     }
 
     //Översätter morse till text
     public String getText(String morse) {
         String text = "";
 
-        if (morseAlphabet.containsValue(morse)) {
-            //Loopar igenom alla nycklar med hjälp av .keySet()
-            for (String key : morseAlphabet.keySet()) {
-                //kollar om värdet för den aktuella nyckeln motsvarar den inkommande morsekoden
-                if (morseAlphabet.get(key).equals(morse)) {
-                    text = key;
+        //Delar upp den inkommande morsekoden i en array separerade av mellanslag (som motsvarar mellanrum mellan tecken)
+        String[] morseArray = morse.split(" ");
+
+        //Loopar igenom morseArray för att checka och översätta varje morse-string/tecken
+        for (int i = 0; i < morseArray.length; i++) {
+            //if-sats för att kolla om värdet finns i hashmapen och kunna ge felmeddelande om inte
+            if (morseAlphabet.containsValue(morseArray[i])) {
+                //Loopar igenom alla nycklar i hashmapen med hjälp av .keySet()
+                for (String key : morseAlphabet.keySet()) {
+                    //kollar om värdet för den aktuella nyckeln motsvarar den inkommande morsekoden, och sparar i så fall värdet i "text"
+                    if (morseAlphabet.get(key).equals(morseArray[i])) {
+                        text += key;
+                    }
                 }
+            } else {
+                //Felmeddelande om det inte finns någon match
+                text = "That doesn't match anything in the library, try again.";
             }
-        } else {
-            System.out.println("That doesn't match anything in the library, try again.");
         }
         return text;
     }
